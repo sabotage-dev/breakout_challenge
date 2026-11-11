@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#07031a">
+<title>SHATTERWAVE — break the bricks, play the melody</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2307031a'/%3E%3Crect x='8' y='12' width='22' height='10' rx='3' fill='%23ff3b8b'/%3E%3Crect x='34' y='12' width='22' height='10' rx='3' fill='%232de2ff'/%3E%3Crect x='8' y='26' width='22' height='10' rx='3' fill='%23ffd23f'/%3E%3Ccircle cx='44' cy='40' r='6' fill='%23fff'/%3E%3Crect x='16' y='50' width='32' height='6' rx='3' fill='%23b26bff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="game" aria-label="Shatterwave game canvas"></canvas>
+<div id="crt" aria-hidden="true"></div>
+
+<div id="ui">
+  <!-- Splash: needed so audio can start on a user gesture -->
+  <section id="scr-splash" class="screen active" data-screen="splash">
+    <div class="logo-wrap">
+      <h1 class="logo"><span class="l1">SHATTER</span><span class="l2">WAVE</span></h1>
+      <p class="tagline">break the bricks &middot; play the melody</p>
+    </div>
+    <p class="press blink">CLICK, TAP OR PRESS ANY KEY</p>
+    <p class="fine">best with sound on &middot; headphones recommended</p>
+  </section>
+
+  <section id="scr-title" class="screen" data-screen="title">
+    <div class="logo-wrap small">
+      <h1 class="logo"><span class="l1">SHATTER</span><span class="l2">WAVE</span></h1>
+      <p class="tagline">break the bricks &middot; play the melody</p>
+    </div>
+    <nav class="menu">
+      <button data-action="play">Campaign</button>
+      <button data-action="endless">Endless</button>
+      <button data-action="howto">How to Play</button>
+      <button data-action="scores">High Scores</button>
+      <button data-action="settings">Settings</button>
+    </nav>
+    <p class="best" id="title-best"></p>
+  </section>
+
+  <section id="scr-sectors" class="screen" data-screen="sectors">
+    <h2>Select Sector</h2>
+    <nav class="menu sectors" id="sector-list"></nav>
+    <nav class="menu"><button data-action="back">Back</button></nav>
+  </section>
+
+  <section id="scr-howto" class="screen" data-screen="howto">
+    <h2>How to Play</h2>
+    <div class="howto">
+      <div class="col">
+        <h3>Controls</h3>
+        <ul class="keys">
+          <li><kbd>Mouse</kbd> <kbd>&larr;</kbd><kbd>&rarr;</kbd> <kbd>A</kbd><kbd>D</kbd> move</li>
+          <li><kbd>Click</kbd> <kbd>Space</kbd> launch &middot; fire lasers</li>
+          <li><kbd>Right-click</kbd> <kbd>E</kbd> <kbd>Shift</kbd> unleash Pulse</li>
+          <li><kbd>Esc</kbd> <kbd>P</kbd> pause &middot; <kbd>M</kbd> mute</li>
+          <li>Touch: drag to move, tap to launch</li>
+          <li>Gamepad: stick move &middot; <kbd>A</kbd> launch &middot; <kbd>X</kbd>/<kbd>RB</kbd> pulse</li>
+        </ul>
+        <h3>The Pulse</h3>
+        <p>Smashing bricks charges the <b class="c-pulse">PULSE</b> meter. When it's full, unleash a shockwave that shreds bricks above your paddle, swats away enemy fire and <b>rescues falling balls</b>.</p>
+        <h3>Chains</h3>
+        <p>Break bricks in quick succession to build a chain. Every 5 bricks raises your multiplier, up to <b>&times;8</b>. Every brick plays a note &mdash; chains climb the scale.</p>
+      </div>
+      <div class="col">
+        <h3>Power-ups</h3>
+        <ul class="pills" id="howto-pills"></ul>
+        <h3>Bricks</h3>
+        <ul class="bricks" id="howto-bricks"></ul>
+      </div>
+    </div>
+    <nav class="menu"><button data-action="back">Back</button></nav>
+  </section>
+
+  <section id="scr-settings" class="screen" data-screen="settings">
+    <h2>Settings</h2>
+    <div class="settings">
+      <label class="row"><span>Music</span><input type="range" id="set-music" min="0" max="100" step="5"><output id="out-music"></output></label>
+      <label class="row"><span>Effects</span><input type="range" id="set-sfx" min="0" max="100" step="5"><output id="out-sfx"></output></label>
+      <label class="row toggle"><span>Screen shake</span><input type="checkbox" id="set-shake"><i></i></label>
+      <label class="row toggle"><span>Flashes</span><input type="checkbox" id="set-flash"><i></i></label>
+      <label class="row toggle"><span>CRT scanlines</span><input type="checkbox" id="set-crt"><i></i></label>
+      <label class="row toggle"><span>Show FPS</span><input type="checkbox" id="set-fps"><i></i></label>
+    </div>
+    <nav class="menu"><button data-action="back">Back</button></nav>
+  </section>
+
+  <section id="scr-scores" class="screen" data-screen="scores">
+    <h2>High Scores</h2>
+    <table class="scores"><thead><tr><th>#</th><th>Name</th><th>Score</th><th>Reached</th></tr></thead><tbody id="score-body"></tbody></table>
+    <nav class="menu"><button data-action="back">Back</button></nav>
+  </section>
+
+  <section id="scr-pause" class="screen" data-screen="pause">
+    <h2>Paused</h2>
+    <nav class="menu">
+      <button data-action="resume">Resume</button>
+      <button data-action="settings">Settings</button>
+      <button data-action="howto">How to Play</button>
+      <button data-action="quit">Quit to Title</button>
+    </nav>
+  </section>
+
+  <section id="scr-over" class="screen" data-screen="over">
+    <h2 id="over-title">Game Over</h2>
+    <div class="final">
+      <div class="big" id="over-score">0</div>
+      <div class="newbest" id="over-newbest">NEW HIGH SCORE</div>
+      <dl class="stats" id="over-stats"></dl>
+    </div>
+    <form id="name-form" class="name-form">
+      <label for="name-input">Enter your name</label>
+      <input id="name-input" maxlength="12" autocomplete="off" spellcheck="false">
+      <button type="submit">Save</button>
+    </form>
+    <nav class="menu" id="over-menu">
+      <button data-action="retry" id="btn-retry">Retry Level</button>
+      <button data-action="overtime" id="btn-overtime">Enter Overtime</button>
+      <button data-action="quit">Title Screen</button>
+    </nav>
+  </section>
+</div>
+
+<button id="touch-pulse" class="hidden" aria-label="Unleash pulse">PULSE</button>
+<button id="touch-pause" class="hidden" aria-label="Pause">II</button>
+
+<script src="js/core.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/background.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/entities.js"></script>
+<script src="js/boss.js"></script>
+<script src="js/game.js"></script>
+<script src="js/physics.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

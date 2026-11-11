@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#041428">
+<meta name="description" content="HADAL — a brick-breaking descent through the five zones of the ocean.">
+<title>HADAL — a brick-breaking descent</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23062a4a'/%3E%3Ccircle cx='32' cy='28' r='13' fill='%23eaf8ff'/%3E%3Ccircle cx='27' cy='23' r='4' fill='%23ffffff'/%3E%3Crect x='13' y='49' width='38' height='7' rx='3.5' fill='%236fe7ff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="game" aria-label="HADAL — game view"></canvas>
+
+<div id="ui">
+
+  <!-- ============================== TITLE ============================== -->
+  <section id="scr-title" class="screen">
+    <div class="title-wrap">
+      <p class="kicker">A brick-breaking descent</p>
+      <h1 class="logo">HADAL</h1>
+      <div class="rule"><span></span><i></i><span></span></div>
+      <p class="epigraph">Full fathom five thy father lies;<br>Of his bones are coral made;<br>Those are pearls that were his eyes.<cite>— The Tempest</cite></p>
+      <nav class="menu">
+        <button type="button" class="btn primary" id="btn-dive" data-first>Dive</button>
+        <button type="button" class="btn" id="btn-continue" hidden>Continue</button>
+        <button type="button" class="btn" id="btn-help">How to play</button>
+        <button type="button" class="btn" id="btn-settings">Settings</button>
+      </nav>
+      <p class="records" id="records"></p>
+    </div>
+    <p class="foot">Mouse · Keyboard · Touch — best with sound on</p>
+  </section>
+
+  <!-- ============================ HOW TO PLAY ============================ -->
+  <section id="scr-help" class="screen scrim">
+    <div class="panel wide">
+      <header>
+        <h2>How to play</h2>
+        <button type="button" class="x" data-back aria-label="Close">&times;</button>
+      </header>
+      <div class="scroll">
+        <p class="lead">Bounce the pearl. Break the reef. Sink through all five zones of the ocean to the floor of the Hadal trench, 10,935 metres down.</p>
+        <div class="cols3">
+          <div class="how">
+            <canvas data-icon="wide" data-size="30"></canvas>
+            <h3>Steer</h3>
+            <p>Move the mouse, press <kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd>, or drag a finger. <kbd>Click</kbd> or <kbd>Space</kbd> launches the pearl.</p>
+          </div>
+          <div class="how">
+            <canvas data-icon="amp" data-size="30"></canvas>
+            <h3>Pulse</h3>
+            <p>Click (or <kbd>Space</kbd>) the instant the pearl lands on your hull. A pulsed pearl hits harder, punches straight through a brick, and keeps your chain alive.</p>
+          </div>
+          <div class="how">
+            <canvas data-icon="sonar" data-size="30"></canvas>
+            <h3>Focus</h3>
+            <p>Hold <kbd>Shift</kbd> or the right mouse button to slow time while your sonar charge lasts. Your hull keeps its full speed.</p>
+          </div>
+          <div class="how">
+            <canvas data-icon="chain" data-size="30"></canvas>
+            <h3>Chain</h3>
+            <p>Break bricks in quick succession and the multiplier climbs. Let the chain timer run dry and it starts over.</p>
+          </div>
+          <div class="how">
+            <canvas data-icon="luck" data-size="30"></canvas>
+            <h3>Upgrade</h3>
+            <p>Clear a stage and pick one of three upgrades. They stack, and they last for the whole dive.</p>
+          </div>
+          <div class="how">
+            <canvas data-icon="life" data-size="30"></canvas>
+            <h3>Survive</h3>
+            <p>Drop your last pearl and you lose a life. Lose them all and the deep keeps you — though you may retry from the top of the zone.</p>
+          </div>
+        </div>
+        <h3 class="sect">Capsules</h3>
+        <div class="grid" id="help-caps"></div>
+        <h3 class="sect">The reef</h3>
+        <div class="grid" id="help-bricks"></div>
+        <p class="keys"><kbd>Esc</kbd> or <kbd>P</kbd> pause &nbsp;·&nbsp; <kbd>M</kbd> mute &nbsp;·&nbsp; <kbd>F</kbd> fullscreen &nbsp;·&nbsp; touch: a second finger taps to pulse, holds to focus</p>
+      </div>
+      <footer><button type="button" class="btn small" data-back data-first>Back</button></footer>
+    </div>
+  </section>
+
+  <!-- ============================== SETTINGS ============================== -->
+  <section id="scr-settings" class="screen scrim">
+    <div class="panel">
+      <header>
+        <h2>Settings</h2>
+        <button type="button" class="x" data-back aria-label="Close">&times;</button>
+      </header>
+      <div class="rows">
+        <label class="row"><span>Music</span><input type="range" id="set-music" min="0" max="100" step="1" aria-label="Music volume"></label>
+        <label class="row"><span>Sound effects</span><input type="range" id="set-sfx" min="0" max="100" step="1" aria-label="Sound effects volume"></label>
+        <div class="row"><span>Screen shake</span><button type="button" class="toggle" id="set-shake">On</button></div>
+        <div class="row"><span>Bright flashes</span><button type="button" class="toggle" id="set-flash">On</button></div>
+        <div class="row"><span>Fullscreen</span><button type="button" class="toggle plain" id="set-full">Toggle</button></div>
+      </div>
+      <footer><button type="button" class="btn small" data-back data-first>Done</button></footer>
+    </div>
+  </section>
+
+  <!-- ================================ PAUSE ================================ -->
+  <section id="scr-pause" class="screen scrim">
+    <div class="panel">
+      <header class="center">
+        <p class="kicker">Holding depth</p>
+        <h2>Paused</h2>
+        <p class="sub" id="pause-sub"></p>
+      </header>
+      <nav class="menu tight">
+        <button type="button" class="btn primary" id="btn-resume" data-first>Resume</button>
+        <button type="button" class="btn" id="btn-p-help">How to play</button>
+        <button type="button" class="btn" id="btn-p-settings">Settings</button>
+        <button type="button" class="btn ghost" id="btn-quit">Abandon dive</button>
+      </nav>
+      <p class="mini">Your upgrades</p>
+      <div class="chips" id="pause-perks"></div>
+    </div>
+  </section>
+
+  <!-- ========================= STAGE CLEAR / PERKS ========================= -->
+  <section id="scr-perk" class="screen scrim">
+    <div class="perk-wrap">
+      <p class="kicker" id="perk-kicker">Stage clear</p>
+      <h2 id="perk-title"></h2>
+      <div class="stats" id="perk-stats"></div>
+      <div class="track" id="perk-track" aria-hidden="true"></div>
+      <p class="next" id="perk-next"></p>
+      <p class="choose"><span></span>Choose an upgrade<span></span></p>
+      <div class="cards" id="perk-cards"></div>
+      <p class="mini dim">Click a card, or press <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></p>
+    </div>
+  </section>
+
+  <!-- ============================== GAME OVER ============================== -->
+  <section id="scr-over" class="screen scrim deep">
+    <div class="panel">
+      <header class="center">
+        <p class="kicker bad">Lost to the deep</p>
+        <h2 class="huge" id="over-depth"></h2>
+        <p class="sub" id="over-where"></p>
+      </header>
+      <div class="stats" id="over-stats"></div>
+      <nav class="menu tight">
+        <button type="button" class="btn primary" id="btn-retry" data-first>Retry zone</button>
+        <button type="button" class="btn" id="btn-new">New dive</button>
+        <button type="button" class="btn ghost" id="btn-o-title">Surface</button>
+      </nav>
+    </div>
+  </section>
+
+  <!-- =============================== VICTORY =============================== -->
+  <section id="scr-win" class="screen scrim">
+    <div class="panel wide">
+      <header class="center">
+        <p class="kicker gold">Challenger Deep · 10,935 m</p>
+        <h2 class="huge">The bottom of the world</h2>
+        <p class="sub">Nothing lies below you now. The Leviathan is still, the vents glow on,<br>and one small pearl made it all the way down.</p>
+      </header>
+      <div class="stats" id="win-stats"></div>
+      <p class="mini">Your build</p>
+      <div class="chips" id="win-perks"></div>
+      <nav class="menu across">
+        <button type="button" class="btn primary" id="btn-w-again" data-first>Dive again</button>
+        <button type="button" class="btn" id="btn-w-title">Surface</button>
+      </nav>
+    </div>
+  </section>
+
+  <!-- stage / zone announcements -->
+  <div id="banner" aria-live="polite">
+    <div id="b-top"></div>
+    <div id="b-title"></div>
+    <div id="b-sub"></div>
+  </div>
+
+  <div id="toast"></div>
+
+  <button type="button" id="btn-pause" aria-label="Pause"><canvas data-icon="pause" data-size="18" data-color="#dff8ff"></canvas></button>
+</div>
+
+<noscript><p style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#e8f7ff;font-family:sans-serif">HADAL needs JavaScript to run.</p></noscript>
+
+<script src="js/util.js"></script>
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/background.js"></script>
+<script src="js/input.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/bosses.js"></script>
+<script src="js/game.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#05061a">
+<title>Lanternwake</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='.5' cy='.55' r='.6'%3E%3Cstop offset='0' stop-color='%23fff0b0'/%3E%3Cstop offset='.4' stop-color='%23ff7a3c'/%3E%3Cstop offset='1' stop-color='%23a81818'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%2308091e'/%3E%3Crect x='10' y='14' width='44' height='36' rx='15' fill='url(%23g)'/%3E%3Crect x='24' y='10' width='16' height='6' rx='2' fill='%231b110b'/%3E%3Crect x='24' y='48' width='16' height='6' rx='2' fill='%231b110b'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="game" aria-label="Lanternwake game"></canvas>
+
+<div id="ui">
+
+  <section class="screen" id="scr-title">
+    <div class="title-block">
+      <img id="logo-lantern" class="logo-lantern" alt="">
+      <h1 class="logo"><span>Lantern</span><em>wake</em></h1>
+      <p class="tagline">Wake the lanterns. Carry the spark. Bring back the dawn.</p>
+      <div class="menu">
+        <button type="button" class="btn primary" id="btn-start">Begin the Night</button>
+        <button type="button" class="btn" id="btn-how">How to Play</button>
+      </div>
+      <p class="best" id="best-line">&nbsp;</p>
+    </div>
+    <p class="foot">Mouse, touch or ← → to steer &nbsp;·&nbsp; Click or Space to launch and Flare &nbsp;·&nbsp; P pause &nbsp;·&nbsp; M mute &nbsp;·&nbsp; F fullscreen</p>
+  </section>
+
+  <section class="screen veil" id="scr-how">
+    <div class="panel wide">
+      <h2>How to Play</h2>
+      <div class="how-grid">
+        <div><b>Steer</b><span>Your boat follows the mouse (or your finger, or the ← → keys). Keep the spark out of the river.</span></div>
+        <div><b>Launch &amp; Flare</b><span>Click or press Space to launch. Click again at the instant a spark lands on the boat for a <i>Flare</i>: a faster shot that pierces lanterns.</span></div>
+        <div><b>Chain</b><span>Wake lanterns in quick succession. The chain multiplies everything you score, up to ×8.</span></div>
+        <div><b>Fireflies</b><span>Catch them with the boat. Forty fill the jar and earn a spare spark.</span></div>
+        <div><b>Wishes</b><span>After every stage, choose one wish. It stays with you until dawn.</span></div>
+        <div><b>Guardians</b><span>Each night ends with a guardian. Dodge what they throw; your spark does the rest.</span></div>
+      </div>
+      <h3>Lanterns</h3>
+      <div class="legend" id="lantern-legend"></div>
+      <h3>Charms</h3>
+      <div class="legend charms" id="charm-list"></div>
+      <div class="menu row">
+        <button type="button" class="btn primary" id="btn-how-back">Back</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen veil" id="scr-pause">
+    <div class="panel">
+      <p class="eyebrow">The river waits</p>
+      <h2>Paused</h2>
+      <div class="sliders">
+        <label><span>Music</span><input type="range" id="vol-music" min="0" max="100" step="1"></label>
+        <label><span>Sound</span><input type="range" id="vol-sfx" min="0" max="100" step="1"></label>
+        <label class="check"><input type="checkbox" id="opt-shake"><span>Screen shake</span></label>
+      </div>
+      <div class="menu">
+        <button type="button" class="btn primary" id="btn-resume">Resume</button>
+        <button type="button" class="btn" id="btn-restart">Restart Run</button>
+        <button type="button" class="btn" id="btn-quit">Quit to Title</button>
+      </div>
+      <div class="owned" id="pause-wishes"></div>
+    </div>
+  </section>
+
+  <section class="screen veil soft" id="scr-wish">
+    <div class="wish-wrap">
+      <p class="eyebrow" id="wish-eyebrow">Stage clear</p>
+      <h2>Make a Wish</h2>
+      <p class="sub">Choose one. It stays with you until dawn.</p>
+      <div class="cards" id="wish-cards"></div>
+      <p class="hint">Click a wish, or press 1 · 2 · 3</p>
+    </div>
+  </section>
+
+  <section class="screen veil" id="scr-end">
+    <div class="panel">
+      <p class="eyebrow" id="end-eyebrow"></p>
+      <h2 id="end-title"></h2>
+      <p class="sub" id="end-sub"></p>
+      <div class="stats" id="end-stats"></div>
+      <div class="owned" id="end-wishes"></div>
+      <div class="menu row">
+        <button type="button" class="btn primary" id="btn-again">Play Again</button>
+        <button type="button" class="btn" id="btn-title">Title</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="corner">
+    <button type="button" class="icon-btn" id="btn-pause" title="Pause (P)" aria-label="Pause">
+      <svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="btn-sound" title="Mute (M)" aria-label="Sound">
+      <svg viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="wave" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke-width="1.8" stroke-linecap="round"/><path class="cross" d="M15.5 9.5l5 5m0-5l-5 5" fill="none" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="btn-full" title="Fullscreen (F)" aria-label="Fullscreen">
+      <svg viewBox="0 0 24 24"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<script src="js/util.js"></script>
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/art.js"></script>
+<script src="js/game.js"></script>
+<script src="js/boss.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#05020f">
+  <title>SHATTERLIGHT</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2307041a'/%3E%3Crect x='8' y='12' width='22' height='9' rx='2' fill='%23ff4bd2'/%3E%3Crect x='34' y='12' width='22' height='9' rx='2' fill='%23a45bff'/%3E%3Crect x='8' y='24' width='22' height='9' rx='2' fill='%233bf0ff'/%3E%3Ccircle cx='40' cy='42' r='5' fill='%23fff'/%3E%3Crect x='14' y='52' width='36' height='5' rx='2.5' fill='%233bf0ff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="game" aria-label="Shatterlight game field"></canvas>
+
+    <div id="ui">
+      <!-- TITLE -->
+      <section class="screen show" id="scr-title">
+        <div class="logo" aria-label="Shatterlight">
+          <span class="word w1" data-text="SHATTER">SHATTER</span>
+          <span class="word w2" data-text="LIGHT">LIGHT</span>
+        </div>
+        <div class="tag">Ten sectors &middot; one Warden &middot; break everything</div>
+        <nav class="menu">
+          <button class="primary" data-act="play">PLAY</button>
+          <button data-act="select">SECTOR SELECT</button>
+          <button data-act="howto">HOW TO PLAY</button>
+          <div class="toggles">
+            <button class="small" data-act="sfx" id="btn-sfx">SFX ON</button>
+            <button class="small" data-act="music" id="btn-music">MUSIC ON</button>
+            <button class="small" data-act="shake" id="btn-shake">SHAKE ON</button>
+          </div>
+        </nav>
+        <div class="best">HIGH SCORE <b id="title-best">0</b></div>
+        <div class="hint">Mouse / touch / &larr; &rarr; to move &nbsp;&middot;&nbsp; click or SPACE to launch &nbsp;&middot;&nbsp; P pause &nbsp;&middot;&nbsp; M mute</div>
+      </section>
+
+      <!-- SECTOR SELECT -->
+      <section class="screen" id="scr-select">
+        <h2>SECTOR SELECT</h2>
+        <p class="sub">Clear a sector to unlock the next. Scores start from zero.</p>
+        <div class="sectors" id="sector-grid"></div>
+        <button data-act="back">BACK</button>
+      </section>
+
+      <!-- HOW TO PLAY -->
+      <section class="screen" id="scr-howto">
+        <h2>HOW TO PLAY</h2>
+        <div class="howto">
+          <div class="col">
+            <h3>CONTROLS</h3>
+            <p><b>Mouse / Touch</b> &mdash; slide the paddle<br><b>&larr; &rarr; / A D</b> &mdash; keyboard movement<br><b>Click / Space</b> &mdash; launch &amp; release<br><b>P / Esc</b> &mdash; pause &nbsp; <b>M</b> &mdash; mute</p>
+            <h3>BRICKS</h3>
+            <ul class="legend">
+              <li><i class="bk crystal"></i>Crystal &mdash; one hit</li>
+              <li><i class="bk armor"></i>Armoured &mdash; two or three hits</li>
+              <li><i class="bk steel"></i>Steel &mdash; unbreakable</li>
+              <li><i class="bk bomb"></i>Volatile &mdash; detonates neighbours</li>
+              <li><i class="bk prism"></i>Prism &mdash; always drops a power-up</li>
+            </ul>
+            <h3>SCORING</h3>
+            <p>Every brick broken before the ball returns to your paddle builds a <b>combo</b>. Each six links raise the multiplier &mdash; and the notes climb the scale. Clear a sector without losing a ball for a <b>flawless</b> bonus.</p>
+          </div>
+          <div class="col">
+            <h3>POWER-UPS</h3>
+            <ul class="caps">
+              <li><span class="chip" style="--c:#4b8bff">E</span><b>Expand</b> wider paddle</li>
+              <li><span class="chip" style="--c:#ff4bd2">M</span><b>Multiball</b> every ball splits in three</li>
+              <li><span class="chip" style="--c:#ff3b5c">L</span><b>Lasers</b> twin auto-cannons</li>
+              <li><span class="chip" style="--c:#4dff88">C</span><b>Magnet</b> catch &amp; aim the ball</li>
+              <li><span class="chip" style="--c:#3bf0ff">S</span><b>Slow-mo</b> calmer ball speed</li>
+              <li><span class="chip" style="--c:#ff8a3b">F</span><b>Fireball</b> melts through bricks</li>
+              <li><span class="chip" style="--c:#e6ecff">B</span><b>Barrier</b> saves one lost ball</li>
+              <li><span class="chip" style="--c:#fff36b">Z</span><b>Chain Zap</b> lightning arcs</li>
+              <li><span class="chip" style="--c:#ffd93b">1UP</span><b>Extra life</b></li>
+              <li><span class="chip bad" style="--c:#8d7bb0">!</span><b>Shrink</b> avoid this one</li>
+            </ul>
+            <p class="warn">Sectors 5 and 10 are guarded by <b>the Warden</b>. Shatter its orbiting shields, strike the core, and dodge its plasma &mdash; a hit stuns your paddle.</p>
+          </div>
+        </div>
+        <button data-act="back">BACK</button>
+      </section>
+
+      <!-- PAUSE -->
+      <section class="screen" id="scr-pause">
+        <h2>PAUSED</h2>
+        <nav class="menu">
+          <button class="primary" data-act="resume">RESUME</button>
+          <button data-act="restart">RESTART SECTOR</button>
+          <div class="toggles">
+            <button class="small" data-act="sfx">SFX ON</button>
+            <button class="small" data-act="music">MUSIC ON</button>
+            <button class="small" data-act="shake">SHAKE ON</button>
+          </div>
+          <button data-act="quit">QUIT TO TITLE</button>
+        </nav>
+      </section>
+
+      <!-- GAME OVER -->
+      <section class="screen" id="scr-over">
+        <h2 class="glitch" data-text="SIGNAL LOST">SIGNAL LOST</h2>
+        <div class="stats">
+          <div><span>SCORE</span><b id="over-score">0</b></div>
+          <div><span>SECTOR</span><b id="over-sector">1</b></div>
+          <div><span>BEST COMBO</span><b id="over-combo">0</b></div>
+        </div>
+        <div class="record" id="over-record">NEW HIGH SCORE</div>
+        <nav class="menu">
+          <button class="primary" data-act="retry" id="btn-retry">RETRY SECTOR</button>
+          <button data-act="quit">TITLE</button>
+        </nav>
+      </section>
+
+      <!-- VICTORY -->
+      <section class="screen" id="scr-victory">
+        <h2 class="victory">THE WARDEN HAS FALLEN</h2>
+        <p class="sub">All ten sectors are free. The light is yours.</p>
+        <div class="stats">
+          <div><span>SCORE</span><b id="win-score">0</b></div>
+          <div><span>LIVES LEFT</span><b id="win-lives">0</b></div>
+          <div><span>BEST COMBO</span><b id="win-combo">0</b></div>
+        </div>
+        <div class="record" id="win-record">NEW HIGH SCORE</div>
+        <nav class="menu">
+          <button class="primary" data-act="endless">ENTER ENDLESS MODE</button>
+          <button data-act="quit">TITLE</button>
+        </nav>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

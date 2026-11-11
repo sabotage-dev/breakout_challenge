@@ -1,0 +1,23 @@
+Run:                   fable_medium
+Model:                 claude-fable-5-2
+Effort:                medium
+Status:                success (completed)
+Session ID:            a4039683-6dfd-4acb-90e2-99a8aa9d33e9
+Started (UTC):         2026-11-10T09:38:37Z
+Finished (UTC):        2026-11-10T09:48:51Z
+
+Total cost:            $3.68
+Total duration (API):  9m 32s
+Total duration (wall): 10m 14s
+
+Wall = session process start to exit. Active agent time: 10m 13s across 1 result event(s).
+Turns:                 14
+Tool calls:            13 (Read 7, Bash 5, Write 1)
+Subagents spawned:     0
+Permission denials:    0
+Usage by model:
+    claude-fable-5-2:  14 input, 60.9k output (24.1k thinking), 420.9k cache read, 72.6k cache write ($3.68)
+
+Output files:          1 files, 54.4 KB, 1157 lines of HTML/CSS/JS
+Entry point:           index.html
+    index.html                                  54.4 KB  1157 lines

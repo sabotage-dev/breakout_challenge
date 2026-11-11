@@ -1,0 +1,34 @@
+Run:                   fable_xhigh
+Model:                 claude-fable-5-2
+Effort:                xhigh
+Status:                success (completed)
+Session ID:            92abb2a9-2b46-40cb-96ee-234a59e4308e
+Started (UTC):         2026-11-10T09:38:37Z
+Finished (UTC):        2026-11-10T10:38:47Z
+
+Total cost:            $20.94
+Total duration (API):  49m 14s
+Total duration (wall): 1h 0m 10s
+
+Wall = session process start to exit. Active agent time: 1h 0m 9s across 1 result event(s).
+Turns:                 68
+Tool calls:            67 (Read 28, Bash 26, Write 12, Edit 1)
+Subagents spawned:     0
+Permission denials:    0
+Usage by model:
+    claude-fable-5-2:  100 input, 307.2k output (158.3k thinking), 14.2m cache read, 362.6k cache write ($20.94)
+
+Output files:          12 files, 221.6 KB, 5698 lines of HTML/CSS/JS
+Entry point:           index.html
+    README.md                                    2.4 KB  60 lines
+    css/style.css                               15.4 KB  556 lines
+    index.html                                   5.9 KB  116 lines
+    js/art.js                                   36.6 KB  922 lines
+    js/audio.js                                 20.5 KB  514 lines
+    js/boss.js                                  30.8 KB  742 lines
+    js/data.js                                   8.1 KB  208 lines
+    js/game.js                                  49.1 KB  1305 lines
+    js/main.js                                   4.6 KB  116 lines
+    js/render.js                                35.2 KB  884 lines
+    js/ui.js                                     9.5 KB  238 lines
+    js/util.js                                   3.6 KB  97 lines

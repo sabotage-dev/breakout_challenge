@@ -1,0 +1,38 @@
+Run:                   fable_max
+Model:                 claude-fable-5-2
+Effort:                max
+Status:                success (completed)
+Session ID:            97b96449-d69a-4b13-908c-e03fc470d8e9
+Started (UTC):         2026-11-10T09:38:37Z
+Finished (UTC):        2026-11-10T10:59:08Z
+
+Total cost:            $35.50
+Total duration (API):  1h 14m 10s
+Total duration (wall): 1h 20m 31s
+
+Wall = session process start to exit. Active agent time: 1h 20m 30s across 1 result event(s).
+Turns:                 100
+Tool calls:            99 (Read 44, Bash 39, Write 15, Edit 1)
+Subagents spawned:     0
+Permission denials:    0
+Usage by model:
+    claude-fable-5-2:  142 input, 484.9k output (280.6k thinking), 31.9m cache read, 608.2k cache write ($35.50)
+
+Output files:          16 files, 275.6 KB, 6640 lines of HTML/CSS/JS
+Entry point:           index.html
+    README.md                                    2.8 KB  65 lines
+    css/style.css                               21.6 KB  640 lines
+    index.html                                   9.5 KB  201 lines
+    js/ai.js                                     2.7 KB  85 lines
+    js/audio.js                                 26.5 KB  576 lines
+    js/background.js                            16.3 KB  353 lines
+    js/bosses.js                                34.4 KB  772 lines
+    js/data.js                                  13.8 KB  342 lines
+    js/game.js                                  56.6 KB  1514 lines
+    js/input.js                                  6.3 KB  147 lines
+    js/main.js                                   3.2 KB  95 lines
+    js/particles.js                              8.1 KB  203 lines
+    js/render.js                                30.9 KB  654 lines
+    js/sprites.js                               22.8 KB  549 lines
+    js/ui.js                                    15.3 KB  375 lines
+    js/util.js                                   4.6 KB  134 lines

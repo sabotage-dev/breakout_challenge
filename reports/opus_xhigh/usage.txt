@@ -1,0 +1,30 @@
+Run:                   opus_xhigh
+Model:                 claude-opus-5-5
+Effort:                xhigh
+Status:                success (completed)
+Session ID:            196e60e6-a984-42a5-9046-50630af0866f
+Started (UTC):         2026-11-10T09:38:37Z
+Finished (UTC):        2026-11-10T10:31:26Z
+
+Total cost:            $14.43
+Total duration (API):  53m 8s
+Total duration (wall): 52m 49s
+
+Wall = session process start to exit. Active agent time: 46m 9s across 2 result event(s); the gap is time spent idle waiting on background work it launched.
+API time exceeds wall time because subagent API calls ran concurrently with the main agent.
+Turns:                 75
+Tool calls:            73 (Bash 41, Read 22, Write 6, Edit 1, Agent 1, ToolSearch 1, Monitor 1)
+Subagent tool calls:   28 (Bash 17, Read 10, SubagentHandback 1)
+Subagents spawned:     1
+Permission denials:    0
+Usage by model:
+    claude-opus-5-5:  180 input, 351.5k output (220.2k thinking), 19.0m cache read, 519.5k cache write ($14.43)
+
+Output files:          6 files, 164.8 KB, 3955 lines of HTML/CSS/JS
+Entry point:           index.html
+    css/style.css                               16.3 KB  309 lines
+    index.html                                   6.7 KB  143 lines
+    js/audio.js                                 20.7 KB  505 lines
+    js/game.js                                  97.0 KB  2392 lines
+    js/levels.js                                 9.4 KB  271 lines
+    js/ui.js                                    14.8 KB  335 lines

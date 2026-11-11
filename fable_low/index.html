@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NOVABREAK</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<style>
+  html,body{margin:0;height:100%;background:#05040d;overflow:hidden;font-family:"Futura","Avenir Next","Century Gothic","Trebuchet MS",sans-serif;color:#dff;user-select:none;-webkit-user-select:none;touch-action:none}
+  body{display:flex;align-items:center;justify-content:center}
+  #wrap{position:relative;box-shadow:0 0 80px rgba(80,120,255,.25),0 0 0 1px rgba(120,160,255,.25);border-radius:6px;overflow:hidden}
+  canvas{display:block;width:100%;height:100%}
+  #wrap.playing canvas{cursor:none}
+  #ui{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,rgba(8,6,30,.55),rgba(3,2,12,.88));backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  #ui.show{display:flex}
+  #panel{text-align:center;max-width:46em;padding:1em 2em;animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
+  h1{font-size:5.2em;margin:0;letter-spacing:.14em;font-weight:800;background:linear-gradient(90deg,#5ff,#a8f,#f6c,#fc6,#5ff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:slide 6s linear infinite;filter:drop-shadow(0 0 .25em rgba(140,120,255,.7))}
+  @keyframes slide{to{background-position:200% 0}}
+  h2{font-size:3em;margin:0 0 .2em;letter-spacing:.16em;color:#fff;text-shadow:0 0 .5em #6cf,0 0 1.2em #63f}
+  .tag{letter-spacing:.5em;font-size:.95em;color:#9be;margin:.4em 0 1.8em;text-transform:uppercase}
+  .big{font-size:1.5em;letter-spacing:.12em;margin:.3em 0;color:#fff}
+  .dim{color:#8ac;font-size:.95em;letter-spacing:.1em;line-height:1.7}
+  .gold{color:#fd6;text-shadow:0 0 .6em #fa0}
+  button{font:inherit;font-size:1.15em;letter-spacing:.25em;color:#eff;background:linear-gradient(180deg,rgba(80,200,255,.25),rgba(120,60,255,.25));border:1px solid #7df;border-radius:2em;padding:.65em 2.2em;margin:.8em .4em .4em;cursor:pointer;text-transform:uppercase;box-shadow:0 0 1.2em rgba(90,200,255,.45),inset 0 0 1em rgba(90,200,255,.2);transition:transform .12s,box-shadow .12s}
+  button:hover{transform:scale(1.06);box-shadow:0 0 2em rgba(120,220,255,.8),inset 0 0 1em rgba(90,200,255,.4)}
+  button.alt{border-color:#86a;color:#bbd;box-shadow:none;background:rgba(60,50,110,.3);font-size:.9em}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5em .9em;margin:1.4em auto .6em;max-width:38em;font-size:.8em;letter-spacing:.08em;color:#bcd;text-align:left}
+  .grid span{display:flex;align-items:center;gap:.6em}
+  .cap{display:inline-flex;align-items:center;justify-content:center;width:2.6em;height:1.3em;border-radius:1em;font-weight:800;color:#012;font-size:.9em;flex:none}
+  kbd{border:1px solid #68a;border-radius:.3em;padding:.05em .45em;color:#dff;font-family:inherit;background:rgba(80,120,200,.15)}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div id="ui"><div id="panel"></div></div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
